@@ -268,20 +268,55 @@
       }, '*');
     };
 
-    document.getElementById('copy').onclick = () => {
-      const resultText = document.getElementById('result').textContent;
-      navigator.clipboard.writeText(resultText).then(() => {
+    document.getElementById('copy').onclick = async () => {
+      try {
+        const resultText = document.getElementById('result').textContent;
+        await navigator.clipboard.writeText(resultText);
+        
         const copyBtn = document.getElementById('copy');
         copyBtn.textContent = 'Copied!';
+        
         setTimeout(() => {
-          const copyBtn = document.getElementById('copy');
           copyBtn.innerHTML = `
             <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
               <path d="M13 4.5V12H4V4.5H13ZM13 3H4C3.2 3 2.5 3.7 2.5 4.5V12c0 .8.7 1.5 1.5 1.5h9c.8 0 1.5-.7 1.5-1.5V4.5c0-.8-.7-1.5-1.5-1.5zm-2-3H1.5C.7 0 0 .7 0 1.5v9h1.5v-9h9.5V0z" fill="currentColor"/>
             </svg>
             Copy`;
         }, 2000);
-      });
+      } catch (error) {
+        console.error('Failed to copy text:', error);
+        // Fallback method using execCommand
+        const textarea = document.createElement('textarea');
+        textarea.value = document.getElementById('result').textContent;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          const copyBtn = document.getElementById('copy');
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => {
+            copyBtn.innerHTML = `
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M13 4.5V12H4V4.5H13ZM13 3H4C3.2 3 2.5 3.7 2.5 4.5V12c0 .8.7 1.5 1.5 1.5h9c.8 0 1.5-.7 1.5-1.5V4.5c0-.8-.7-1.5-1.5-1.5zm-2-3H1.5C.7 0 0 .7 0 1.5v9h1.5v-9h9.5V0z" fill="currentColor"/>
+              </svg>
+              Copy`;
+          }, 2000);
+        } catch (err) {
+          console.error('Fallback copy method failed:', err);
+          const copyBtn = document.getElementById('copy');
+          copyBtn.textContent = 'Copy failed';
+          setTimeout(() => {
+            copyBtn.innerHTML = `
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M13 4.5V12H4V4.5H13ZM13 3H4C3.2 3 2.5 3.7 2.5 4.5V12c0 .8.7 1.5 1.5 1.5h9c.8 0 1.5-.7 1.5-1.5V4.5c0-.8-.7-1.5-1.5-1.5zm-2-3H1.5C.7 0 0 .7 0 1.5v9h1.5v-9h9.5V0z" fill="currentColor"/>
+              </svg>
+              Copy`;
+          }, 2000);
+        }
+        document.body.removeChild(textarea);
+      }
     };
 
     window.onmessage = (event) => {
