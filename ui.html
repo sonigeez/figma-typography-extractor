@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    :root {
+      --figma-color-bg: #2C2C2C;
+      --figma-color-text: #FFFFFF;
+      --figma-color-text-secondary: #999999;
+      --figma-color-bg-secondary: #383838;
+      --figma-color-bg-hover: #444444;
+      --figma-color-border: #444444;
+      --figma-color-primary: #0D99FF;
+      --figma-color-primary-hover: #0088FF;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 16px;
+      color: var(--figma-color-text);
+      background-color: var(--figma-color-bg);
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--figma-color-text);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--figma-color-bg-secondary);
+      padding: 16px;
+      border-radius: 6px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--figma-color-text);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--figma-color-bg);
+      transition: .2s;
+      border-radius: 20px;
+      border: 1px solid var(--figma-color-border);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--figma-color-text-secondary);
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--figma-color-primary);
+      border-color: var(--figma-color-primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(16px);
+      background-color: white;
+    }
+
+    .extract-button {
+      background-color: var(--figma-color-primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      width: 100%;
+    }
+
+    .extract-button:hover {
+      background-color: var(--figma-color-primary-hover);
+    }
+
+    .result-container {
+      position: relative;
+      flex-grow: 1;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #result {
+      background-color: var(--figma-color-bg-secondary);
+      padding: 16px;
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Roboto Mono', monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      font-size: 12px;
+      flex-grow: 1;
+      margin: 0;
+      height: 100%;
+      color: var(--figma-color-text);
+      line-height: 1.5;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: var(--figma-color-bg);
+      color: var(--figma-color-text);
+      border: 1px solid var(--figma-color-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-button:hover {
+      background-color: var(--figma-color-bg-hover);
+    }
+
+    .error {
+      color: #FF3B30;
+      background-color: rgba(255, 59, 48, 0.1);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M14.5 2h-13C.7 2 0 2.7 0 3.5v9c0 .8.7 1.5 1.5 1.5h13c.8 0 1.5-.7 1.5-1.5v-9c0-.8-.7-1.5-1.5-1.5zm0 10.5h-13v-9h13v9zM6.5 5H2v2h4.5V5zm7.5 0H8v2h6V5zm-7.5 4H2v2h4.5V9zm7.5 0H8v2h6V9z" fill="currentColor"/>
+      </svg>
+      <h2>Typography Extractor</h2>
+    </div>
+
+    <div class="options">
+      <div class="option">
+        <label class="switch">
+          <input type="checkbox" id="includeStyle" checked>
+          <span class="slider"></span>
+        </label>
+        <span>Typography Style</span>
+      </div>
+      <div class="option">
+        <label class="switch">
+          <input type="checkbox" id="includeParentName" checked>
+          <span class="slider"></span>
+        </label>
+        <span>Parent Name</span>
+      </div>
+      <div class="option">
+        <label class="switch">
+          <input type="checkbox" id="includeHierarchy" checked>
+          <span class="slider"></span>
+        </label>
+        <span>Hierarchy</span>
+      </div>
+      <div class="option">
+        <label class="switch">
+          <input type="checkbox" id="includeColor" checked>
+          <span class="slider"></span>
+        </label>
+        <span>Text Color</span>
+      </div>
+    </div>
+
+    <div id="error" class="error"></div>
+    
+    <button id="extract" class="extract-button">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z" fill="currentColor"/>
+      </svg>
+      Extract Typography
+    </button>
+
+    <div class="result-container">
+      <div id="result"></div>
+      <button id="copy" class="copy-button" style="display: none;">
+        Copy
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const options = {
+      style: true,
+      parentName: true,
+      hierarchy: true,
+      color: true
+    };
+
+    document.getElementById('includeStyle').onchange = (e) => options.style = e.target.checked;
+    document.getElementById('includeParentName').onchange = (e) => options.parentName = e.target.checked;
+    document.getElementById('includeHierarchy').onchange = (e) => options.hierarchy = e.target.checked;
+    document.getElementById('includeColor').onchange = (e) => options.color = e.target.checked;
+
+    document.getElementById('extract').onclick = () => {
+      document.getElementById('result').textContent = '';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('error').textContent = '';
+      document.getElementById('copy').style.display = 'none';
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'extract-typography',
+          options: options
+        }
+      }, '*');
+    };
+
+    document.getElementById('copy').onclick = () => {
+      const resultText = document.getElementById('result').textContent;
+      navigator.clipboard.writeText(resultText).then(() => {
+        const copyBtn = document.getElementById('copy');
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          const copyBtn = document.getElementById('copy');
+          copyBtn.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M13 4.5V12H4V4.5H13ZM13 3H4C3.2 3 2.5 3.7 2.5 4.5V12c0 .8.7 1.5 1.5 1.5h9c.8 0 1.5-.7 1.5-1.5V4.5c0-.8-.7-1.5-1.5-1.5zm-2-3H1.5C.7 0 0 .7 0 1.5v9h1.5v-9h9.5V0z" fill="currentColor"/>
+            </svg>
+            Copy`;
+        }, 2000);
+      });
+    };
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      
+      if (msg.type === 'typography-data') {
+        const result = msg.data;
+        document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+        document.getElementById('copy').style.display = 'block';
+      } else if (msg.type === 'error') {
+        const errorDiv = document.getElementById('error');
+        errorDiv.textContent = msg.message;
+        errorDiv.style.display = 'block';
+      }
+    };
+  </script>
+</body>
+</html>

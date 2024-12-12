@@ -1,0 +1,32 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      '@figma/plugin-typings':
+        specifier: ^1.82.0
+        version: 1.104.0
+      typescript:
+        specifier: ^5.0.0
+        version: 5.7.2
+
+packages:
+
+  '@figma/plugin-typings@1.104.0':
+    resolution: {integrity: sha512-FKnn/KASBYhXibTJvH8K9doUs1PCNwp8HZxPa+jbM/k5wNWHY4Z3jRsUCFPtl0YepZQqV8o1sBE7TM+cLZ3UkQ==}
+
+  typescript@5.7.2:
+    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  '@figma/plugin-typings@1.104.0': {}
+
+  typescript@5.7.2: {}

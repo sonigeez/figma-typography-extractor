@@ -1,0 +1,14 @@
+{
+  "name": "figma-typography-extractor",
+  "version": "1.0.0",
+  "description": "Figma plugin to extract typography styles",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.82.0",
+    "typescript": "^5.0.0"
+  }
+}
